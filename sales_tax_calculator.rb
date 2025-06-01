@@ -1,4 +1,4 @@
-class SalesTax
+class SalesTaxCalculator
   BASIC_TAX_RATE = 0.10
   IMPORT_DUTY_RATE = 0.05
   EXEMPT_CATEGORIES = %w[book food medical].freeze
@@ -12,10 +12,10 @@ class SalesTax
   # @return [Hash] A hash containing the basic tax, import tax, total tax, and total amount
   # @raise [SalesTaxError] If the price is not a positive number
 
-  def self.calculate(price, item_name, imported = false)
-    raise SalesTaxError, 'Price must be a positive number' unless price.is_a?(Numeric) && price.positive?
+  def self.calculate(price, item_name, category, imported = false)
+    validate_inputs(price, item_name)
 
-    exempt = exempt_from_basic_tax?(item_name)
+    exempt = exempt_from_basic_tax?(category)
 
     basic_tax = exempt ? 0 : round_tax(price * BASIC_TAX_RATE)
     import_tax = imported ? round_tax(price * IMPORT_DUTY_RATE) : 0
@@ -33,8 +33,16 @@ class SalesTax
 
   private
 
-  def self.exempt_from_basic_tax?(item_name)
-    EXEMPT_CATEGORIES.any? { |category| item_name.downcase.include?(category) }
+  def self.validate_inputs(price, item_name)
+    raise SalesTaxError, 'Price must be a positive number' unless price.is_a?(Numeric) && price.positive?
+    raise SalesTaxError, 'Item name must be a non-empty string' unless item_name.is_a?(String) && !item_name.empty?
+  end
+
+  def self.exempt_from_basic_tax?(category)
+    # TODO: How to determine the item category?
+    EXEMPT_CATEGORIES.include?(category)
+
+    # EXEMPT_CATEGORIES.any? { |exempt| category.downcase.include?(exempt) }
   end
 
   # Rounds the tax amount to the nearest 0.05

@@ -34,6 +34,10 @@ class Item
     "#{@name} - $#{format('%.2f', @price)} x #{@quantity} = $#{format('%.2f', total_price)}"
   end
 
+  def category
+    TODO: 'How to determine the item category?'
+  end
+
   private
 
   # Validate all parameters
