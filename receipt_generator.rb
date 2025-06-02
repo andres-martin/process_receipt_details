@@ -4,8 +4,10 @@ require_relative 'sales_tax_calculator'
 class ReceiptGenerator
   def self.generate_receipt(items)
     processor = ItemsProcessor.new
+    tax_calculator = SalesTaxCalculator.new
+
     items_obj = processor.process(items)
-    item_taxes = SalesTaxCalculator.calculate_sales_tax(items_obj)
+    item_taxes = tax_calculator.calculate_sales_tax(items_obj)
 
     print_formatted_receipt(item_taxes)
   end
