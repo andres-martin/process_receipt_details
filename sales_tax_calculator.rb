@@ -18,9 +18,10 @@ class SalesTaxCalculator
 
   # Calculates the sales tax for a given price and item name
   # @param price [Numeric] The price of the item
+  # @param quantity [Integer] The quantity of the item
   # @param item_name [String] The name of the item
   # @param imported [Boolean] Whether the item is imported
-  # @return [Hash] A hash containing the basic tax, import tax, total tax, and total amount
+  # @return [Hash] A hash containing the item_name, quantity, basic tax, import tax, total tax, and total amount
   # @raise [SalesTaxError] If the price is not a positive number
 
   def self.calculate(price, quantity, item_name, category, imported = false)
