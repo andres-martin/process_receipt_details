@@ -1,9 +1,6 @@
-class ItemsProcessor
-  # example input
-  # 2 book at 12.49
-  # 1 music CD at 14.99
-  # 1 chocolate bar at 0.85
+require_relative 'models/item'
 
+class ItemsProcessor
   class ItemsProcessorError < StandardError; end
 
   # Processes an array of item strings and returns an array of Item objects
@@ -14,7 +11,6 @@ class ItemsProcessor
     raise ItemsProcessorError, "Input must be an array" unless items_array.is_a?(Array)
     raise ItemsProcessorError, "No valid items to process" if items_array.empty?
 
-    # Process each item string into an Item object
     items_array.map do |item_string|
       begin
         create_item_from_string(item_string)
@@ -48,6 +44,3 @@ class ItemsProcessor
     Item.new(name, price, quantity, imported)
   end
 end
-
-# read item from string
-# then create item object

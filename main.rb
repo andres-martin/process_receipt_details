@@ -1,6 +1,6 @@
 require_relative 'purchase_file_reader'
+require_relative 'receipt_generator'
 
-# Get file path from command line arguments
 file_path = ARGV[0]
 
 if file_path.nil? || file_path.empty?
@@ -10,10 +10,8 @@ if file_path.nil? || file_path.empty?
 end
 
 begin
-  # Read the file and process its contents
   item_lines = PurchaseFileReader.read_file(file_path)
   ReceiptGenerator.generate_receipt(item_lines)
-
 
 rescue StandardError => e
   puts "Error: #{e.message}"

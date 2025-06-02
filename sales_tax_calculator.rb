@@ -5,6 +5,17 @@ class SalesTaxCalculator
 
   class SalesTaxError < StandardError; end
 
+  def self.calculate_sales_tax(items)
+    items.map do |item|
+      begin
+        calculate(item.price, item.quantity, item.name, item.category, item.imported)
+      rescue SalesTaxError => e
+        puts "Error calculating sales tax for item '#{item.name}': #{e.message}"
+        nil
+      end
+    end.compact
+  end
+
   # Calculates the sales tax for a given price and item name
   # @param price [Numeric] The price of the item
   # @param item_name [String] The name of the item
@@ -12,9 +23,8 @@ class SalesTaxCalculator
   # @return [Hash] A hash containing the basic tax, import tax, total tax, and total amount
   # @raise [SalesTaxError] If the price is not a positive number
 
-  def self.calculate(price, item_name, category, imported = false)
+  def self.calculate(price, quantity, item_name, category, imported = false)
     validate_inputs(price, item_name)
-
     exempt = exempt_from_basic_tax?(category)
 
     basic_tax = exempt ? 0 : round_tax(price * BASIC_TAX_RATE)
@@ -24,10 +34,12 @@ class SalesTaxCalculator
     total_amount = price + total_tax
 
     {
-      basic_tax:,
-      import_tax:,
-      total_tax:,
-      total_amount:
+      item_name:,
+      quantity:,
+      basic_tax: (basic_tax * quantity).round(2),
+      import_tax: (import_tax * quantity).round(2),
+      total_tax: (total_tax * quantity).round(2),
+      total_amount: (total_amount * quantity).round(2),
     }
   end
 
@@ -39,10 +51,7 @@ class SalesTaxCalculator
   end
 
   def self.exempt_from_basic_tax?(category)
-    # TODO: How to determine the item category?
     EXEMPT_CATEGORIES.include?(category)
-
-    # EXEMPT_CATEGORIES.any? { |exempt| category.downcase.include?(exempt) }
   end
 
   # Rounds the tax amount to the nearest 0.05

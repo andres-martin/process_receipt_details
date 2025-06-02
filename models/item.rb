@@ -1,5 +1,3 @@
-require 'bigdecimal'
-
 class Item
   attr_reader :name, :price, :quantity, :imported
 
@@ -15,7 +13,7 @@ class Item
     validate_params(name, price, quantity, imported)
 
     @name = name.dup.freeze
-    @price = BigDecimal(price.to_s)
+    @price = price.to_f.freeze
     @quantity = quantity
     @imported = imported
 
@@ -23,19 +21,25 @@ class Item
   end
 
   # Calculate the total price for this item
-  # @return [BigDecimal] The total price
+  # @return The total price
   def total_price
     @price * @quantity
   end
 
-  # Format the item as a string
-  # @return [String] A formatted string representation
-  def to_s
-    "#{@name} - $#{format('%.2f', @price)} x #{@quantity} = $#{format('%.2f', total_price)}"
-  end
-
+  # Determine the category of the item based on its name
+  # @return [String] The category of the item
   def category
-    TODO: 'How to determine the item category?'
+    name_lower = @name.downcase
+
+    if name_lower.include?('book')
+      'book'
+    elsif name_lower.include?('food') || name_lower.include?('chocolate')
+      'food'
+    elsif name_lower.include?('medical') || name_lower.include?('pill')
+      'medical'
+    else
+      'other'
+    end
   end
 
   private

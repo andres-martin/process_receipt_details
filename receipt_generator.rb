@@ -1,20 +1,32 @@
 require_relative 'items_processor'
+require_relative 'sales_tax_calculator'
 
 class ReceiptGenerator
-  # TODO:
-  # read purchase file
-  # call ItemsProcessor.process to process items from file
-  # call SalesTaxCalculator.calculate_sales_tax to calculate sales tax
-  # then generate receipt and print it to stdout
-  # could create a Receipt class to encapsulate receipt details
-
   def self.generate_receipt(items)
-    ItemsProcessor.process(items)
-    SalesTaxCalculator.calculate_sales_tax(items)
+    items_obj = ItemsProcessor.process(items)
+    item_taxes = SalesTaxCalculator.calculate_sales_tax(items_obj)
+
+    print_formatted_receipt(item_taxes)
   end
 
   private
 
-  def calculate_total
+  def self.print_formatted_receipt(item_taxes)
+    item_taxes.each do |item|
+      quantity = item[:quantity]
+      name = item[:item_name]
+
+      puts "#{quantity} #{name}: #{format('%.2f', item[:total_amount])}"
+    end
+
+    total_taxes = item_taxes.sum { |item| item[:total_tax] }
+    total_amount = item_taxes.sum { |item| item[:total_amount] }
+
+    puts "Sales Taxes: #{format('%.2f', total_taxes)}"
+    puts "Total: #{format('%.2f', total_amount)}"
+  end
+
+  def self.calculate_total(item_taxes)
+    item_taxes.sum { |item| item[:total_amount] }
   end
 end
