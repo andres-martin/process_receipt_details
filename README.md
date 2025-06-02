@@ -19,20 +19,20 @@ This Ruby application processes shopping receipts, calculates sales taxes accord
 
 1. Clone the repository:
 
-   ```
+   ```markdown
    git clone https://github.com/yourusername/process_receipt_details.git
    cd process_receipt_details
    ```
 
 2. Ensure you have Ruby installed (version 2.6 or higher recommended):
 
-   ```
+   ```ruby
    ruby --version
    ```
 
 3. Install required gems for testing:
 
-   ```
+   ```ruby
    gem install rspec
    ```
 
@@ -42,7 +42,7 @@ This Ruby application processes shopping receipts, calculates sales taxes accord
 
 Run the program by providing a path to a receipt file:
 
-```
+```ruby
 ruby main.rb path/to/receipt_file.txt
 ```
 
@@ -50,14 +50,14 @@ ruby main.rb path/to/receipt_file.txt
 
 Each line in the receipt file should follow this format:
 
-```
+```markdown
 [quantity] [item name] at [price]
 ```
 
 Example:
 
-```
-1 book at 12.49
+```markdown
+2 book at 12.49
 1 music CD at 14.99
 1 chocolate bar at 0.85
 ```
@@ -72,27 +72,26 @@ The program will output a formatted receipt showing:
 
 Example output:
 
-```
-1 book: 12.49
+```markdown
+2 book: 24.98
 1 music CD: 16.49
 1 chocolate bar: 0.85
 Sales Taxes: 1.50
-Total: 29.83
+Total: 42.32
 ```
 
 ## Testing
 
 Run the test suite with:
 
-```
+```ruby
 rspec
 ```
 
 Or run specific test files:
 
-```
-rspec spec/sales_tax_calculator_spec.rb
-rspec spec/receipt_generator_spec.rb
+```ruby
+rspec spec/sales_tax_calculator_spec.rb --format documentation
 ```
 
 ## Project Structure
@@ -111,34 +110,34 @@ rspec spec/receipt_generator_spec.rb
 
 Input:
 
-```
-1 book at 12.49
+```markdown
+2 book at 12.49
 1 music CD at 14.99
 1 chocolate bar at 0.85
 ```
 
 Output:
 
-```
-1 book: 12.49
+```markdown
+2 book: 24.98
 1 music CD: 16.49
 1 chocolate bar: 0.85
 Sales Taxes: 1.50
-Total: 29.83
+Total: 42.32
 ```
 
 ### Example 2
 
 Input:
 
-```
+```markdown
 1 imported box of chocolates at 10.00
 1 imported bottle of perfume at 47.50
 ```
 
 Output:
 
-```
+```markdown
 1 imported box of chocolates: 10.50
 1 imported bottle of perfume: 54.65
 Sales Taxes: 7.65
