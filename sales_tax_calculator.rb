@@ -41,8 +41,8 @@ class SalesTaxCalculator
     total_amount = price + total_tax
 
     {
-      item_name: item_name,
-      quantity: quantity,
+      item_name:,
+      quantity:,
       basic_tax: (basic_tax * quantity).round(2),
       import_tax: (import_tax * quantity).round(2),
       total_tax: (total_tax * quantity).round(2),

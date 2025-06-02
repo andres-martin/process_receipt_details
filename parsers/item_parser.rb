@@ -18,10 +18,10 @@ class ItemParser
     imported = name.downcase.include?('imported')
 
     {
-      name: name,
-      price: price,
-      quantity: quantity,
-      imported: imported
+      name:,
+      price:,
+      quantity:,
+      imported:
     }
   end
 end
