@@ -1,9 +1,10 @@
-require_relative 'items_processor'
+require_relative 'processors/items_processor'
 require_relative 'sales_tax_calculator'
 
 class ReceiptGenerator
   def self.generate_receipt(items)
-    items_obj = ItemsProcessor.process(items)
+    processor = ItemsProcessor.new
+    items_obj = processor.process(items)
     item_taxes = SalesTaxCalculator.calculate_sales_tax(items_obj)
 
     print_formatted_receipt(item_taxes)

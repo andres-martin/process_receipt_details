@@ -1,13 +1,15 @@
-require_relative '../items_processor'
-require_relative '../models/item'
+require_relative '../../processors/items_processor'
+require_relative '../../models/item'
 
 RSpec.describe ItemsProcessor do
-  describe '.process' do
+  let(:processor) { ItemsProcessor.new }
+
+  describe '#process' do
     context 'with valid input' do
       let(:valid_items) { ['1 book at 12.49', '2 music CDs at 14.99'] }
 
       it 'returns an array of Item objects' do
-        result = ItemsProcessor.process(valid_items)
+        result = processor.process(valid_items)
 
         expect(result).to be_an(Array)
         expect(result.size).to eq(2)
@@ -15,7 +17,7 @@ RSpec.describe ItemsProcessor do
       end
 
       it 'correctly processes item attributes' do
-        result = ItemsProcessor.process(valid_items)
+        result = processor.process(valid_items)
 
         expect(result[0].name).to eq('book')
         expect(result[0].price).to eq(12.49)
@@ -33,7 +35,7 @@ RSpec.describe ItemsProcessor do
       let(:imported_items) { ['1 imported box of chocolates at 10.00'] }
 
       it 'correctly identifies imported status' do
-        result = ItemsProcessor.process(imported_items)
+        result = processor.process(imported_items)
 
         expect(result[0].name).to eq('imported box of chocolates')
         expect(result[0].imported).to be true
@@ -42,12 +44,30 @@ RSpec.describe ItemsProcessor do
 
     context 'with invalid input' do
       it 'raises error when input is not an array' do
-        expect { ItemsProcessor.process('not an array') }.to raise_error(ItemsProcessor::ItemsProcessorError, 'Input must be an array')
+        expect { processor.process('not an array') }.to raise_error(ItemsProcessor::ItemsProcessorError, 'Input must be an array')
       end
 
       it 'raises error when input array is empty' do
-        expect { ItemsProcessor.process([]) }.to raise_error(ItemsProcessor::ItemsProcessorError, 'No valid items to process')
+        expect { processor.process([]) }.to raise_error(ItemsProcessor::ItemsProcessorError, 'No valid items to process')
       end
+    end
+  end
+
+  context 'with custom parser' do
+    let(:custom_parser) { double('CustomParser') }
+    let(:processor) { ItemsProcessor.new(parser: custom_parser) }
+    let(:valid_items) { ['1 book at 12.49'] }
+
+    it 'uses the provided parser' do
+      expect(custom_parser).to receive(:parse).and_return({
+        name: 'book',
+        price: 12.49,
+        quantity: 1,
+        imported: false
+      })
+
+      result = processor.process(valid_items)
+      expect(result[0].name).to eq('book')
     end
   end
 end
