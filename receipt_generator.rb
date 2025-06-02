@@ -26,8 +26,4 @@ class ReceiptGenerator
     puts "Sales Taxes: #{format('%.2f', total_taxes)}"
     puts "Total: #{format('%.2f', total_amount)}"
   end
-
-  def self.calculate_total(item_taxes)
-    item_taxes.sum { |item| item[:total_amount] }
-  end
 end
